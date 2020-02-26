@@ -1,0 +1,16 @@
+[package]
+name = "UrlTester-rs"
+version = "0.1.2"
+authors = ["xl350r <danhsecure@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.9.22"
+threadpool="1.7.1"
+clap = "2.33.0"
+
+[profile.release]
+lto = true
+panic = 'abort'
