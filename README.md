@@ -7,9 +7,9 @@ A Urltester written in Rust. Based off of a ruby script I wrote a year ago to te
 If stuff doesn't work let me know, i've tested if to work on my network but it may not work on yours. Some of the ways I've implemented aspects of the code may be unoptimal as I'm (A) not a software developer by trade, and (B) I am still learning serveral aspects of coding on this level typically coding/scripting with ruby, python, bash or powershell.
  
 ### Dependacies
-reqwest = "0.9.22"
-threadpool="1.7.1"
-clap = "2.33.0"
+* reqwest = "0.9.22"
+* threadpool="1.7.1"
+* clap = "2.33.0"
 
 ### Usage
 
