@@ -19,17 +19,22 @@ Daniel Hoberecht
 Test Web Proxies from list of addresses
 
 USAGE:
-    UrlTester-rs.exe [OPTIONS]
+    UrlTester-rs [OPTIONS]
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 OPTIONS:
-    -P, --pass <Pass>                Basic Proxy Auth Password
-    -i, --proxy-ip <Proxy Ip>        Proxy IP
-    -p, --proxy-port <Proxy Port>    Proxy Port
-    -t, --threads <Threads>          number of thread to use
-    -u, --user <User>                Basic Proxy Auth Username
-    -f, --file <file>                File of urls to use
+    -P, --pass <Pass>          Basic Proxy Auth Password
+    -p, --proxy <Proxy>        Proxy
+    -t, --threads <Threads>    number of thread to use
+    -u, --user <User>          Basic Proxy Auth Username
+    -f, --file <file>          File of urls to use
+```
+
+### Example
+
+```sh
+$> UrlTester-rs -t 10 --proxy "http://localhost:8000" -f urls.lst
 ```
