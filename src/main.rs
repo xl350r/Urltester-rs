@@ -16,7 +16,7 @@ use std::path::Path; // Check if file exists.
 
 
 enum Proxy { // proxy or no proxy enum
-	With{Ip: String, Port: String},
+	With{Addr: String},
 	Without
 }
 enum SSL { // accept or not accept invalid certificates.
@@ -34,8 +34,8 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 	match secure {
 		SSL::Secure => {
 			match proxy {
-				Proxy::With {Ip, Port} => {
-					let prox = format!("{}:{}",Ip, Port);
+				Proxy::With {Addr} => {
+					let prox = format!("{}", Addr);
 					match auth {
 						BasicAuth::Without => {
 						 	Ok(Client::builder()
@@ -45,7 +45,7 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 							)
 						}
 						BasicAuth::With {User, Pass} => {
-							Ok(Client::builder()
+							Ok(Client::builder()	  
 								.proxy(reqwest::Proxy::all(&prox)?.basic_auth(&User, &Pass))
 								.timeout(::std::time::Duration::from_secs(5))
 								.build()?
@@ -63,8 +63,8 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 		}
 		SSL::Insecure => {
 			match proxy {
-				Proxy::With {Ip, Port} => {
-					let prox = format!("{}:{}",Ip, Port);
+				Proxy::With {Addr} => {
+					let prox = format!("{}", Addr);
 					match auth {
 						BasicAuth::Without => {
 						 	Ok(Client::builder()
@@ -105,16 +105,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 			.long("file")
 			.takes_value(true)
 			)
-		.arg(Arg::with_name("Proxy Ip")
-			.help("Proxy IP")
-			.short("i")
-			.long("proxy-ip")
-			.takes_value(true)
-			)
-		.arg(Arg::with_name("Proxy Port")
-			.help("Proxy Port")
+		.arg(Arg::with_name("Proxy")
+			.help("Proxy")
 			.short("p")
-			.long("proxy-port")
+			.long("proxy")
 			.takes_value(true)
 			)
 		.arg(Arg::with_name("Threads")
@@ -137,8 +131,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 			)
 		.get_matches();
 		let file = matches.value_of("file").unwrap_or("urls.lst");
-		let proxy_ip = matches.value_of("Proxy Ip");
-		let proxy_port = matches.value_of("Proxy Port");
+		let _proxy = matches.value_of("Proxy");
 		let threads = matches.value_of("Threads");
 		let user_auth = matches.value_of("User");
 		let pass_auth = matches.value_of("Pass");
@@ -156,14 +149,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 		for (_, line) in reader.lines().enumerate() { // iterate over file with buffered
 			let ssl = SSL::Insecure; // Set ssl to enum SSL::Insecure
 			//let proxy = Proxy::With {Ip: ip.clone(), Port: port.clone()}; 
-			let proxy =	match proxy_ip {
+			let proxy = match _proxy {
 				None => {Proxy::Without},
-				_ => {
-					match proxy_port {
-						None => {Proxy::Without},
-						_ => {Proxy::With {Ip: proxy_ip.unwrap().to_string(), Port: proxy_port.unwrap().to_string()} }
-					}
-				},
+				_ => {Proxy::With{Addr: _proxy.unwrap().to_string()}}
 			};
 			let auth = match user_auth {
 				None => {BasicAuth::Without},
