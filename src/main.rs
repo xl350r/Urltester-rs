@@ -8,7 +8,7 @@ extern crate clap;
 use clap::{Arg, App};  // get cmdline arguments
 use threadpool::ThreadPool; // makes this go WAY faster
 use std::io::BufRead; // Read File line by line
-use reqwest::Client; // Connect / Set get requests to web servers
+//use reqwest::blocking::Client; // Connect / Set get requests to web servers
 use std::fs::File; // open files
 use std::error::Error; // For boxing all errors
 use std::path::Path; // Check if file exists.
@@ -30,7 +30,7 @@ enum BasicAuth {
 
 
 
-fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::Client, Box<dyn Error>> {
+fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::blocking::Client, Box<dyn Error>> {
 	match secure {
 		SSL::Secure => {
 			match proxy {
@@ -38,14 +38,14 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 					let prox = format!("{}", Addr);
 					match auth {
 						BasicAuth::Without => {
-						 	Ok(Client::builder()
+						 	Ok(reqwest::blocking::Client::builder()
 							    .proxy(reqwest::Proxy::all(&prox)?)
 							    .timeout(::std::time::Duration::from_secs(5))
 							    .build()?
 							)
 						}
 						BasicAuth::With {User, Pass} => {
-							Ok(Client::builder()	  
+							Ok(reqwest::blocking::Client::builder()	  
 								.proxy(reqwest::Proxy::all(&prox)?.basic_auth(&User, &Pass))
 								.timeout(::std::time::Duration::from_secs(5))
 								.build()?
@@ -54,7 +54,7 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 					}
 				}
 				Proxy::Without => {
-					Ok(Client::builder()
+					Ok(reqwest::blocking::Client::builder()
 						.timeout(::std::time::Duration::from_secs(5))
 						.build()?
 					)
@@ -67,14 +67,14 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 					let prox = format!("{}", Addr);
 					match auth {
 						BasicAuth::Without => {
-						 	Ok(Client::builder()
+						 	Ok(reqwest::blocking::Client::builder()
 							    .proxy(reqwest::Proxy::all(&prox)?)
 							    .timeout(::std::time::Duration::from_secs(5))
 							    .build()?
 							)
 						}
 						BasicAuth::With {User, Pass} => {
-							Ok(Client::builder()
+							Ok(reqwest::blocking::Client::builder()
 								.proxy(reqwest::Proxy::all(&prox)?.basic_auth(&User, &Pass))
 								.timeout(::std::time::Duration::from_secs(5))
 								.build()?
@@ -83,7 +83,7 @@ fn build_client(secure: SSL, proxy: Proxy, auth: BasicAuth) -> Result<reqwest::C
 					}
 				}
 				Proxy::Without => {
-					Ok(Client::builder()
+					Ok(reqwest::blocking::Client::builder()
 						.timeout(::std::time::Duration::from_secs(5))
 						.danger_accept_invalid_certs(true)
 						.build()?
@@ -171,7 +171,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 			pool.execute(move || {
 				match build_client(ssl,proxy,auth).unwrap().get(&url).send() {
 					Ok(c)  => {println!("{} {}",&url, c.status());},
-					Err(e) => {eprintln!("{:?}", e);}	
+					Err(e) => {eprintln!("{}", e.to_string());}	
 				}
 			});
 		}
