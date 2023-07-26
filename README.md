@@ -1,6 +1,6 @@
 # UrlTester-rs
 
-A Urltester written in Rust. Based off of a ruby script I wrote a year ago to test proxy and firewall filters for websites. Included is a formatted version of the [majestic million](https://majestic.com/reports/majestic-million). This repository is provided as freeware. If you like it let me know, if you have suggestions for improvement or change also let me know. 
+A Urltester written in Rust. Based off of a ruby script I wrote a year ago to test proxy and firewall filters for websites. This repository is provided as freeware. If you like it let me know, if you have suggestions for improvement or change also let me know. 
 
 ### Note
 
