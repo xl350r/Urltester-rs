@@ -4,7 +4,7 @@ A Urltester written in Rust. Based off of a ruby script I wrote a year ago to te
 
 ### Note
 
-If stuff doesn't work let me know, i've tested it to work on my network but it may not work on yours. Some of the ways I've implemented aspects of the code may be unoptimal as I'm (A) not a software developer by trade, and (B) I am still learning serveral aspects of coding on this level typically coding/scripting with ruby, python, bash or powershell.
+If stuff doesn't work let me know, i've tested it to work on my network but it may not work on yours. Some of the ways I've implemented aspects of the code may be unoptimal as I'm not a software developer by trade
  
 ### Dependacies
 * reqwest = "0.9.22"
